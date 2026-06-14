@@ -1,0 +1,465 @@
+:root {
+    --bg-main: #0a0a0c;
+    --bg-sidebar: #000000;
+    --bg-card: #141419;
+    --bg-card-hover: #1d1d24;
+    --spotify-green: #1db954;
+    --text-main: #ffffff;
+    --text-muted: #8e8e93;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+}
+
+.app-container {
+    display: flex;
+    height: calc(100vh - 90px);
+}
+
+.sidebar {
+    width: 260px;
+    background-color: var(--bg-sidebar);
+    padding: 24px;
+    border-right: 1px solid #16161a;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #00f0ff, #ff007f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.categories h3 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+/* --- Абсолютно новое неоновое оформление карточек --- */
+.category-card {
+    position: relative;
+    background: #0d0d11;
+    padding: 18px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-muted);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border: 1px solid #1a1a22;
+    /* Плавный переход для цвета, теней и масштаба */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.3s ease, 
+                color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+/* Бегущая лазерная линия-индикатор на внутренней границе карточки */
+.neon-line {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background-color: var(--neon-color);
+    box-shadow: 0 0 10px var(--neon-color);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.category-card span {
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease, text-shadow 0.3s;
+}
+
+/* --- АНИМАЦИИ ПРИ НАВЕДЕНИИ (HOVER) --- */
+.category-card:hover {
+    color: #ffffff;
+    border-color: var(--neon-color);
+    transform: translateY(-4px) scale(1.03); /* Карточка приподнимается */
+    /* Индивидуальное неоновое свечение в зависимости от переменной цвета */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 
+                0 0 20px var(--neon-color); 
+}
+
+.category-card:hover .neon-line {
+    transform: scaleY(0.6); /* Линия плавно появляется */
+}
+
+.category-card:hover span {
+    transform: translateX(6px);
+    text-shadow: 0 0 10px var(--neon-color);
+}
+
+/* --- СОСТОЯНИЕ АКТИВНОГО (ВЫБРАННОГО) ЖАНРА --- */
+.category-card.active {
+    color: #ffffff;
+    background: #13131a;
+    border-color: var(--neon-color);
+    /* Бесконечная неоновая пульсация "дыхания" */
+    animation: neonGlowPulse 1.8s infinite alternate ease-in-out;
+}
+
+.category-card.active .neon-line {
+    transform: scaleY(1); /* Линия раскрывается на полную высоту */
+}
+
+.category-card.active span {
+    transform: translateX(10px);
+    color: #ffffff;
+    text-shadow: 0 0 15px var(--neon-color), 0 0 5px #fff;
+}
+
+/* Ключевые кадры пульсации неона */
+@keyframes neonGlowPulse {
+    0% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 
+                    0 0 12px var(--neon-color);
+    }
+    100% {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 
+                    0 0 30px var(--neon-color), /* Свечение разрастается наружу */
+                    inset 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* Главный контент */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background: linear-gradient(180deg, #110e1a 0%, var(--bg-main) 50%);
+}
+
+.content-header h1 {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* Сетка треков */
+.tracks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 24px;
+}
+
+.track-card {
+    background-color: var(--bg-card);
+    padding: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    position: relative;
+    border: 1px solid #1c1c24;
+}
+
+.track-card:hover {
+    background-color: var(--bg-card-hover);
+    transform: translateY(-5px);
+}
+
+.card-cover-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.card-cover {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+.card-play-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--spotify-green);
+    border: none;
+    color: #000;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.track-card:hover .card-play-btn { opacity: 1; transform: translateY(0); }
+.track-card.active .card-play-btn { opacity: 1; transform: translateY(0); background-color: #00f0ff; }
+
+.card-title {
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-artist { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+.track-card.active .card-title { color: #00f0ff; }
+
+/* --- Нижний плеер --- */
+.bottom-player {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 90px;
+    background-color: #0b0b0d;
+    border-top: 1px solid #1a1a22;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 100;
+}
+
+.player-track-info { display: flex; align-items: center; width: 30%; }
+.player-cover { width: 56px; height: 56px; border-radius: 4px; margin-right: 14px; object-fit: cover; }
+.track-title { font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; }
+.track-artist { font-size: 0.8rem; color: var(--text-muted); }
+
+/* Реальный эквалайзер */
+.eq-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 35px;
+    height: 30px;
+    margin-left: 20px;
+}
+
+.eq-bar {
+    width: 4px;
+    height: 3px;
+    background: linear-gradient(to top, #ff007f, #00f0ff);
+    border-radius: 2px;
+    box-shadow: 0 0 8px #00f0ff;
+    transition: height 0.05s ease; 
+}
+
+.player-controls-block { display: flex; flex-direction: column; align-items: center; width: 40%; }
+.controls { margin-bottom: 8px; }
+.btn {
+    background: none; border: none; color: #fff; font-size: 1.2rem;
+    cursor: pointer; margin: 0 16px; opacity: 0.7; transition: all 0.2s;
+}
+.btn:hover { opacity: 1; transform: scale(1.1); }
+.play-btn { font-size: 1.8rem; opacity: 1; color: var(--text-main); }
+
+.progress-block { display: flex; align-items: center; width: 100%; }
+.time-label { font-size: 0.75rem; color: var(--text-muted); width: 40px; }
+.time-label:first-child { text-align: right; margin-right: 8px; }
+.time-label:last-child { text-align: left; margin-left: 8px; }
+
+.progress-container { flex: 1; background: #2a2a32; border-radius: 4px; cursor: pointer; height: 4px; position: relative; transition: height 0.1s; }
+.progress-container:hover { height: 6px; }
+.progress { background: linear-gradient(90deg, #ff007f, #00f0ff); border-radius: 4px; height: 100%; width: 0%; }
+
+.player-right-controls { display: flex; align-items: center; justify-content: flex-end; width: 30%; }
+.volume-icon { font-size: 1rem; margin-right: 10px; color: var(--text-muted); }
+#volume-slider { accent-color: #00f0ff; cursor: pointer; width: 100px; }
+/* ==========================================================================
+   АДАПТИВНЫЕ СТИЛИ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (ЭКРАНЫ МЕНЕЕ 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    
+    /* 1. Меняем направление главного контейнера с горизонтального на вертикальное */
+    .app-container {
+        flex-direction: column;
+        height: calc(100vh - 110px); /* Выделяем чуть больше места под мобильный плеер */
+    }
+
+    /* 2. Перестраиваем сайдбар в верхнюю горизонтальную панель */
+    .sidebar {
+        width: 100%;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        border-right: none;
+        border-bottom: 1px solid #16161a;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    /* Превращаем блок категорий в горизонтальный скролл-бар */
+    .categories {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        gap: 10px;
+        /* Скрываем стандартный полосу прокрутки для аккуратного вида */
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .categories::-webkit-scrollbar {
+        display: none; /* Скрываем скроллбар в Chrome/Safari */
+    }
+
+    .categories h3 {
+        display: none; /* Прячем заголовок "Музыкальные Жанры" на мобильных */
+    }
+
+    .category-card {
+        padding: 10px 16px;
+        white-space: nowrap; /* Запрещаем тексту переноситься на новую строку */
+        font-size: 0.85rem;
+        border-radius: 20px; /* Делаем карточки круглыми капсулами на мобилках */
+    }
+
+    .category-card:hover {
+        transform: none; /* Отключаем подъем карточек при наведении на тач-экранах */
+    }
+
+    .category-card.active span {
+        transform: translateX(0); /* Убираем сдвиг текста для мобильной капсулы */
+    }
+
+    /* 3. Корректируем зону главного контента */
+    .main-content {
+        padding: 20px 16px;
+        background: linear-gradient(180deg, #110e1a 0%, var(--bg-main) 20%);
+    }
+
+    .content-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    /* Делаем сетку треков более плотной (по 2 карточки в ряд на телефонах) */
+    .tracks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+    }
+
+    .track-card {
+        padding: 12px;
+    }
+
+    .card-title {
+        font-size: 0.85rem;
+    }
+
+    .card-artist {
+        font-size: 0.75rem;
+    }
+
+    /* На мобильных кнопка Play на карточке видна всегда, так как "наведения мыши" нет */
+    .card-play-btn {
+        opacity: 1;
+        transform: translateY(0);
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+
+    /* 4. Полная перестройка нижнего плеера под тач-управление */
+    .bottom-player {
+        height: 110px;
+        padding: 12px 16px;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Верхний ряд мобильного плеера: инфо о треке + кнопки управления */
+    .player-track-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .player-cover {
+        width: 44px;
+        height: 44px;
+    }
+
+    .text-info {
+        flex: 1;
+        max-width: 140px;
+    }
+
+    /* Скрываем эквалайзер на маленьких экранах, чтобы не загромождать интерфейс */
+    .eq-container {
+        display: none;
+    }
+
+    /* Переносим кнопки управления в правый верхний угол плеера */
+    .player-controls-block {
+        width: auto;
+        flex-direction: row;
+    }
+
+    .controls {
+        margin-bottom: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn {
+        margin: 0 8px;
+        font-size: 1.1rem;
+    }
+
+    .play-btn {
+        font-size: 1.6rem;
+    }
+
+    /* Нижний ряд мобильного плеера: шкала прогресса на всю ширину */
+    .progress-block {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 0;
+    }
+
+    /* На смартфонах делаем шкалу прогресса тонкой линией на самом верху плеера */
+    .progress-container {
+        height: 3px;
+        border-radius: 0;
+    }
+    
+    .progress {
+        border-radius: 0;
+    }
+
+    .time-label {
+        display: none; /* Прячем текстовые минуты (0:00), экономя место */
+    }
+
+    /* Скрываем ползунок громкости на мобильных (пользователи управляют кнопками телефона) */
+    .player-right-controls {
+        display: none;
+    }
+}

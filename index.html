@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no">
+    <title>Музыкальная Платформа | WAVE-STREAM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Боковая панель (Жанры) -->
+        <aside class="sidebar">
+            <div class="logo">🎵 NDSL music</div>
+            
+            <div class="categories">
+                <h3>Музыкальные Жанры</h3>
+                <!-- Карточки категорий с новыми жанрами и индивидуальными неоновыми цветами -->
+                <div class="category-card active" data-genre="all" style="--neon-color: #00f0ff;">
+                    <div class="neon-line"></div>
+                    <span>🌌 Все треки</span>
+                </div>
+                <div class="category-card" data-genre="pop" style="--neon-color: #ff007f;">
+                    <div class="neon-line"></div>
+                    <span>🎤 Поп Музыка</span>
+                </div>
+                <div class="category-card" data-genre="rock" style="--neon-color: #ffaa00;">
+                    <div class="neon-line"></div>
+                    <span>🎸 Рок / Альтернатива</span>
+                </div>
+                <div class="category-card" data-genre="club" style="--neon-color: #a855f7;">
+                    <div class="neon-line"></div>
+                    <span>🎛️ Клубная / EDM</span>
+                </div>
+                <div class="category-card" data-genre="rap" style="--neon-color: #00ff66;">
+                    <div class="neon-line"></div>
+                    <span>🔥 Рэп & Хип-Хоп</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Главный контент (Сетка треков) -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1 id="current-genre-title">🌌 Все треки</h1>
+            </header>
+            
+            <div class="tracks-grid" id="tracks-grid"></div>
+        </main>
+    </div>
+
+    <!-- Нижний фиксированный плеер -->
+    <footer class="bottom-player">
+        <div class="player-track-info">
+            <img src="https://unsplash.com" alt="Обложка" id="cover" class="player-cover">
+            <div class="text-info">
+                <div id="title" class="track-title">Название трека</div>
+                <div id="artist" class="track-artist">Исполнитель</div>
+            </div>
+            
+            <!-- Реальный неоновый эквалайзер API -->
+            <div class="eq-container" id="equalizer">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+        </div>
+
+        <div class="player-controls-block">
+            <div class="controls">
+                <button id="prev" class="btn">⏮</button>
+                <button id="play" class="btn play-btn">▶</button>
+                <button id="next" class="btn">⏭</button>
+            </div>
+            
+            <div class="progress-block">
+                <span id="current-time" class="time-label">0:00</span>
+                <div class="progress-container" id="progress-container">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <span id="duration" class="time-label">0:00</span>
+            </div>
+        </div>
+
+        <div class="player-right-controls">
+            <span class="volume-icon">🔊</span>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.7">
+        </div>
+    </footer>
+
+    <audio id="audio" src=""></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
