@@ -4,7 +4,7 @@ const songs = [
         title: 'Улыбнись мне снова',
         artist: 'Алина Кей',
         genre: 'pop',
-        audioSrc: 'https://soundhelix.com',
+        audioSrc: 'https://github.com/91ndsl-blip/NDSL124/commit/6cc39f28f3e3726defd4591b64c8457a86e32335#diff-e06e2d2253bb2c7efb0b51cb3bf70e1cc1d88e44e8350cf75684c68c666b18f6',
         coverSrc: 'https://unsplash.com'
     },
     {
